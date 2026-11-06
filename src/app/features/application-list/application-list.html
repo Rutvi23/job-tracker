@@ -1,0 +1,71 @@
+<section class="page-head">
+  <h1>Applications</h1>
+  <a class="btn btn-primary" routerLink="/applications/new">+ Add application</a>
+</section>
+
+<div class="card toolbar">
+  <input
+    type="search"
+    placeholder="Search company, role or location"
+    aria-label="Search applications"
+    [formControl]="searchControl"
+  />
+  <select aria-label="Filter by status" (change)="onStatusFilter($event)">
+    <option value="All">All statuses</option>
+    @for (status of statuses; track status) {
+      <option [value]="status">{{ status }}</option>
+    }
+  </select>
+  <select aria-label="Sort applications" (change)="onSort($event)">
+    <option value="newest">Newest first</option>
+    <option value="oldest">Oldest first</option>
+    <option value="company">Company A–Z</option>
+  </select>
+</div>
+
+@if (visible().length === 0) {
+  <div class="card empty">
+    <p>No applications match your filters.</p>
+  </div>
+} @else {
+  <div class="card table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Added</th>
+          <th><span class="visually-hidden">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (app of visible(); track app.id) {
+          <tr>
+            <td><strong>{{ app.company }}</strong></td>
+            <td>{{ app.role }}</td>
+            <td>{{ app.location }}</td>
+            <td>
+              <app-status-badge [status]="app.status" />
+              <select
+                class="inline-select"
+                [attr.aria-label]="'Change status for ' + app.company"
+                (change)="onStatusChange(app, $event)"
+              >
+                @for (status of statuses; track status) {
+                  <option [value]="status" [selected]="status === app.status">{{ status }}</option>
+                }
+              </select>
+            </td>
+            <td>{{ app.appliedOn | daysAgo }}</td>
+            <td class="actions">
+              <a class="btn btn-small" [routerLink]="['/applications', app.id, 'edit']">Edit</a>
+              <button type="button" class="btn btn-small btn-danger" (click)="remove(app)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

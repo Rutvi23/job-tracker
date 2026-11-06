@@ -1,0 +1,79 @@
+<section class="page-head">
+  <h1>{{ isEdit ? 'Edit application' : 'Add application' }}</h1>
+</section>
+
+<form class="card form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="field">
+    <label for="company">Company *</label>
+    <input id="company" type="text" formControlName="company" [attr.aria-invalid]="errorOf('company') ? true : null" />
+    @if (errorOf('company'); as message) {
+      <p class="error" role="alert">{{ message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="role">Role *</label>
+    <input id="role" type="text" formControlName="role" [attr.aria-invalid]="errorOf('role') ? true : null" />
+    @if (errorOf('role'); as message) {
+      <p class="error" role="alert">{{ message }}</p>
+    }
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label for="location">Location *</label>
+      <input id="location" type="text" formControlName="location" />
+      @if (errorOf('location'); as message) {
+        <p class="error" role="alert">{{ message }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="status">Status</label>
+      <select id="status" formControlName="status">
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label for="appliedOn">Date *</label>
+      <input id="appliedOn" type="date" formControlName="appliedOn" [max]="maxDate" />
+      @if (errorOf('appliedOn'); as message) {
+        <p class="error" role="alert">{{ message }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label for="salaryLpa">Expected CTC (LPA)</label>
+      <input id="salaryLpa" type="number" step="0.5" formControlName="salaryLpa" />
+      @if (errorOf('salaryLpa'); as message) {
+        <p class="error" role="alert">{{ message }}</p>
+      }
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="link">Job link</label>
+    <input id="link" type="url" placeholder="https://…" formControlName="link" />
+    @if (errorOf('link'); as message) {
+      <p class="error" role="alert">{{ message }}</p>
+    }
+  </div>
+
+  <div class="field">
+    <label for="notes">Notes</label>
+    <textarea id="notes" rows="4" formControlName="notes"></textarea>
+    @if (errorOf('notes'); as message) {
+      <p class="error" role="alert">{{ message }}</p>
+    }
+  </div>
+
+  <div class="form-actions">
+    <a class="btn" routerLink="/applications">Cancel</a>
+    <button type="submit" class="btn btn-primary">{{ isEdit ? 'Save changes' : 'Add application' }}</button>
+  </div>
+</form>

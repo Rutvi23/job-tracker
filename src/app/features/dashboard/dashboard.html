@@ -1,0 +1,62 @@
+<section class="page-head">
+  <h1>Dashboard</h1>
+  <a class="btn btn-primary" routerLink="/applications/new">+ Add application</a>
+</section>
+
+<section class="stats" aria-label="Summary">
+  <div class="card stat">
+    <span class="stat-value">{{ service.total() }}</span>
+    <span class="stat-label">Total</span>
+  </div>
+  <div class="card stat">
+    <span class="stat-value">{{ service.activeCount() }}</span>
+    <span class="stat-label">Active</span>
+  </div>
+  <div class="card stat">
+    <span class="stat-value">{{ service.countsByStatus().Interview }}</span>
+    <span class="stat-label">Interviews</span>
+  </div>
+  <div class="card stat">
+    <span class="stat-value">{{ service.countsByStatus().Offer }}</span>
+    <span class="stat-label">Offers</span>
+  </div>
+  <div class="card stat">
+    <span class="stat-value">{{ service.responseRate() }}%</span>
+    <span class="stat-label">Response rate</span>
+  </div>
+</section>
+
+<div class="grid-2">
+  <section class="card" aria-labelledby="pipeline-title">
+    <h2 id="pipeline-title">Pipeline</h2>
+    @for (status of statuses; track status) {
+      <div class="bar-row">
+        <span class="bar-label">{{ status }}</span>
+        <div class="bar-track" aria-hidden="true">
+          <div class="bar-fill" [class]="'fill-' + status.toLowerCase()" [style.width.%]="percentOf(status)"></div>
+        </div>
+        <span class="bar-count">{{ service.countsByStatus()[status] }}</span>
+      </div>
+    }
+  </section>
+
+  <section class="card" aria-labelledby="recent-title">
+    <h2 id="recent-title">Recent activity</h2>
+    @if (service.recent().length === 0) {
+      <p class="muted">Nothing yet. Add your first application to get started.</p>
+    } @else {
+      <ul class="recent">
+        @for (app of service.recent(); track app.id) {
+          <li>
+            <div>
+              <a [routerLink]="['/applications', app.id, 'edit']"><strong>{{ app.company }}</strong></a>
+              <span class="muted"> · {{ app.role }}</span>
+              <div class="muted small">{{ app.appliedOn | daysAgo }}</div>
+            </div>
+            <app-status-badge [status]="app.status" />
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</div>

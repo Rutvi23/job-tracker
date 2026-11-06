@@ -1,0 +1,17 @@
+<header class="app-header">
+  <div class="container nav">
+    <a class="brand" routerLink="/">JobTracker</a>
+    <nav aria-label="Main">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+      <a routerLink="/applications" routerLinkActive="active">Applications</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <router-outlet />
+</main>
+
+<footer class="container muted small">
+  Data is stored in your browser (localStorage). Sample entries are fictional.
+</footer>
